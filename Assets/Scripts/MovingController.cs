@@ -5,48 +5,64 @@ public class MovingController : MonoBehaviour
     public LayerMask mask;
     public float velocity = 1;
     public Vector3 movementDirection;
-    public Vector3 destinationPoint;
-    public float minHeight = 0.2f;
-    public float RotationSpeed = 0.1f;
+    private Vector3 destinationPoint;
+    public float Height = 0.2f;
+    public float camHeight;
+    public Transform MeshTransform;
+
+    public Transform camTransform;
 
     RaycastHit hit;
 
-    public bool isMoving;
-    public Vector3 RotationDirection;
-
     private void Update()
     {
-
-        DestinationCalculate();
+        ChangeDirection();
+        CalculateDestination();
         CheckHeight();
         Move();
-        Rotate();
-        Debug.DrawRay(hit.point, hit.normal * 3, Color.magenta);
     }
 
-    private void DestinationCalculate()
+    private void CalculateDestination()
     {
-        //movementDirection = transform.forward; //move with const speed
-
-        movementDirection = Input.GetAxis("Vertical") * transform.forward; //move  with  buttons
-        destinationPoint = transform.position + movementDirection * velocity * Time.deltaTime;
+        movementDirection = transform.forward * velocity * Time.deltaTime;
+        destinationPoint = transform.position + movementDirection;
     }
 
     private void CheckHeight()
     {
-        Physics.Raycast(destinationPoint,-transform.up, out hit, 2, mask); //get hit near destinationPoint but with "height"
+        var direction = MeshTransform.position - destinationPoint;
+        Physics.Raycast(destinationPoint, direction, out hit, 5, mask);
+
+        var cross = Vector3.Cross(hit.normal, transform.forward);
+        var newFrw = Vector3.Cross(cross, hit.normal);
+
+        var rot = Quaternion.LookRotation(newFrw,hit.normal);
+        transform.rotation = rot;
     }
 
-    private void Move()
+    private void ChangeDirection()
     {
-        if (isMoving)
+        var ver = Input.GetAxis("Vertical");
+        var hor = Input.GetAxis("Horizontal");
+
+        if(Input.GetButton("Vertical") || Input.GetButton("Horizontal"))
         {
-            transform.position = Vector3.MoveTowards(transform.position, hit.point + transform.up * minHeight, velocity * Time.deltaTime);
-            transform.rotation *= Quaternion.FromToRotation(transform.up, hit.normal);
+            var vec = hor * camTransform.right + ver * camTransform.up;
+            var rot = Quaternion.LookRotation(vec, -camTransform.forward);
+
+            transform.rotation = rot;
         }
     }
 
-    private void Rotate()
+
+    private void Move()
     {
+        var targetPoint = hit.point + hit.normal * Height;
+        transform.position = Vector3.MoveTowards(transform.position, targetPoint, velocity * Time.deltaTime);
+
+        camTransform.position = hit.point + hit.normal * camHeight;
+        camTransform.LookAt(transform,camTransform.up);
     }
+
+
 }
