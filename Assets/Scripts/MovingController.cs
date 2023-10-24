@@ -2,17 +2,25 @@ using UnityEngine;
 
 public class MovingController : MonoBehaviour
 {
-    public LayerMask mask;
-    public float velocity = 1;
-    public Vector3 movementDirection;
+    public LayerMask Mask;
+    public float Velocity = 1;
+    public float Height = 0.05f;
+    public float CamHeight;
+    public float LerpSpeed;
+
+    [SerializeField]private Transform MeshTransform;
+    [SerializeField]private Transform camTransform;
+
+    private RaycastHit hit;
+    private Vector3 movementDirection;
     private Vector3 destinationPoint;
-    public float Height = 0.2f;
-    public float camHeight;
-    public Transform MeshTransform;
 
-    public Transform camTransform;
-
-    RaycastHit hit;
+    private void Start()
+    {
+        var y = transform.up * CamHeight;
+        camTransform.position = transform.position + y;
+        camTransform.LookAt(transform, camTransform.up);
+    }
 
     private void Update()
     {
@@ -24,43 +32,46 @@ public class MovingController : MonoBehaviour
 
     private void CalculateDestination()
     {
-        movementDirection = transform.forward * velocity * Time.deltaTime;
-        destinationPoint = transform.position + movementDirection;
+        movementDirection = transform.forward * Velocity;
+        destinationPoint = transform.position + movementDirection * Time.deltaTime;
     }
 
     private void CheckHeight()
     {
         var direction = MeshTransform.position - destinationPoint;
-        Physics.Raycast(destinationPoint, direction, out hit, 5, mask);
+        Physics.Raycast(destinationPoint, direction, out hit, 5, Mask);
 
-        var cross = Vector3.Cross(hit.normal, transform.forward);
-        var newFrw = Vector3.Cross(cross, hit.normal);
+        Debug.DrawRay(destinationPoint, direction, Color.green);
+        Debug.DrawRay(hit.point, hit.normal * 5, Color.magenta);
 
-        var rot = Quaternion.LookRotation(newFrw,hit.normal);
-        transform.rotation = rot;
+        var cross = Vector3.Cross(hit.normal, transform.forward);//vector perpendicular to plane normal-forward for build new vector forward
+        var newForward = Vector3.Cross(cross, hit.normal);
+
+        var rotation = Quaternion.LookRotation(newForward,hit.normal);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, LerpSpeed * Time.deltaTime);
     }
 
     private void ChangeDirection()
     {
-        var ver = Input.GetAxis("Vertical");
-        var hor = Input.GetAxis("Horizontal");
+        var vertical = Input.GetAxis("Vertical");
+        var horizontal = Input.GetAxis("Horizontal");
 
         if(Input.GetButton("Vertical") || Input.GetButton("Horizontal"))
         {
-            var vec = hor * camTransform.right + ver * camTransform.up;
-            var rot = Quaternion.LookRotation(vec, -camTransform.forward);
+            var forward = horizontal * camTransform.right + vertical * camTransform.up;
+            var rotation = Quaternion.LookRotation(forward, -camTransform.forward);
 
-            transform.rotation = rot;
+            //transform.rotation = rotation;
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5*LerpSpeed * Time.deltaTime);
         }
     }
-
 
     private void Move()
     {
         var targetPoint = hit.point + hit.normal * Height;
-        transform.position = Vector3.MoveTowards(transform.position, targetPoint, velocity * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPoint, Velocity * Time.deltaTime);
 
-        camTransform.position = hit.point + hit.normal * camHeight;
+        camTransform.position = Vector3.Lerp(camTransform.position, hit.point + hit.normal * CamHeight, LerpSpeed * Time.deltaTime);
         camTransform.LookAt(transform,camTransform.up);
     }
 
