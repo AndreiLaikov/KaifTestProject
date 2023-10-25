@@ -7,4 +7,9 @@ public class Food : MonoBehaviour
         other.GetComponent<BodyController>().AddPart();
         Destroy(gameObject);
     }
+
+    private void OnDestroy()
+    {
+
+    }
 }

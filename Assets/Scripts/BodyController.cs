@@ -24,8 +24,6 @@ public class BodyController : MonoBehaviour
         rotations.Add(HeadTransform.rotation);
 
         bodyHorizontalSize = BodyPart.GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
-       
-        AddPart();
     }
 
     public void AddPart()
