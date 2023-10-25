@@ -12,6 +12,7 @@ public class BodyController : MonoBehaviour
 
     private int lastIndex;
     private float distance;
+    public float bodyHorizontalSize;
 
     private void Start()
     {
@@ -22,6 +23,8 @@ public class BodyController : MonoBehaviour
         positions.Add(HeadTransform.position);
         rotations.Add(HeadTransform.rotation);
 
+        bodyHorizontalSize = BodyPart.GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
+       
         AddPart();
     }
 
@@ -40,7 +43,7 @@ public class BodyController : MonoBehaviour
     {
         distance = (HeadTransform.position - positions[0]).magnitude;
 
-        if (distance > 1.0f)
+        if (distance > bodyHorizontalSize)
         {
             positions.Insert(0, HeadTransform.position);
             positions.RemoveAt(positions.Count - 1);
@@ -48,14 +51,13 @@ public class BodyController : MonoBehaviour
             rotations.Insert(0, HeadTransform.rotation);
             rotations.RemoveAt(rotations.Count - 1);
 
-            distance -= 1;
-
+            distance -= bodyHorizontalSize;//reduce float rest 
         }
 
         for (int i = 0; i < bodyPartTransforms.Count; i++)
         {
-            bodyPartTransforms[i].position = Vector3.Lerp(positions[i + 1], positions[i], distance);
-            bodyPartTransforms[i].rotation = Quaternion.Lerp(rotations[i + 1], rotations[i], distance);
+            bodyPartTransforms[i].position = Vector3.Lerp(positions[i + 1], positions[i], distance/bodyHorizontalSize);
+            bodyPartTransforms[i].rotation = Quaternion.Lerp(rotations[i + 1], rotations[i], distance/bodyHorizontalSize);
         }
     }
 
