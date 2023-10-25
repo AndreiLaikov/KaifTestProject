@@ -28,8 +28,7 @@ public class BodyController : MonoBehaviour
         AddPart();
     }
 
-    [ContextMenu("Add")]
-    private void AddPart()
+    public void AddPart()
     {
         lastIndex = positions.Count - 1;
 
