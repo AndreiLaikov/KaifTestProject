@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -362,7 +362,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 0}
+  m_BackGroundColor: {r: 0, g: 0.40708634, b: 0.5188679, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -474,6 +474,14 @@ PrefabInstance:
     - target: {fileID: 7401062889823993483, guid: 8ae124330b6a3423787b8c98c30667ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188367615759218328, guid: 8ae124330b6a3423787b8c98c30667ba, type: 3}
+      propertyPath: Height
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188367615759218328, guid: 8ae124330b6a3423787b8c98c30667ba, type: 3}
+      propertyPath: Velocity
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8188367615759218328, guid: 8ae124330b6a3423787b8c98c30667ba, type: 3}
       propertyPath: camTransform
