@@ -5,13 +5,13 @@ public class FoodSpawner : MonoBehaviour
 {
     public GameObject Food;
     public MeshFilter Surface;
-
+    public LayerMask mask;
     public int startFoodCount = 100;
 
     private List<Vector3> vertices = new List<Vector3>();
     private float foodMaxSize;
 
-    public void Start()
+    private void Start()
     {
         Surface.sharedMesh.GetVertices(vertices);
         Spawn(startFoodCount);
@@ -31,20 +31,20 @@ public class FoodSpawner : MonoBehaviour
 
             if (CheckFreePosition(vertices[j]))
             {
-                Instantiate(Food.gameObject, vertices[j], Quaternion.identity, transform);
+                var newFood = Instantiate(Food.gameObject, vertices[j], Quaternion.identity, transform);
+                newFood.GetComponent<Food>().foodSpawnerInstance = this;
             }
             else
             {
-                count++;
+               count++;
             }
         }
     }
 
     private bool CheckFreePosition(Vector3 pos)
     {
-        var colliders = Physics.OverlapSphere(pos, foodMaxSize);
+        var colliders = Physics.OverlapSphere(pos, foodMaxSize, mask);
 
         return colliders.Length == 0 ? true : false;
     }
-
 }
