@@ -7,11 +7,7 @@ public class Food : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         other.GetComponent<BodyController>().AddPart();
-        Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
         foodSpawnerInstance.Spawn(1);
+        Destroy(gameObject);
     }
 }

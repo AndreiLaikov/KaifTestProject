@@ -137,15 +137,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4126760707676832983, guid: 3b094fc29d1e9474baa61a24344ad9ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -11.4
       objectReference: {fileID: 0}
     - target: {fileID: 4126760707676832983, guid: 3b094fc29d1e9474baa61a24344ad9ca, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -6.2
       objectReference: {fileID: 0}
     - target: {fileID: 4126760707676832983, guid: 3b094fc29d1e9474baa61a24344ad9ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 18.4
       objectReference: {fileID: 0}
     - target: {fileID: 4126760707676832983, guid: 3b094fc29d1e9474baa61a24344ad9ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -211,6 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Food: {fileID: 4338421608682240939, guid: 1c449e271edae4746816b2261b52b959, type: 3}
   Surface: {fileID: 2059920425}
+  mask:
+    serializedVersion: 2
+    m_Bits: 128
   startFoodCount: 100
 --- !u!4 &371685797
 Transform:
@@ -412,7 +415,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.0823193, y: 53.22, z: 1.9104018}
+  m_LocalPosition: {x: 0, y: 53.22, z: 12.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
