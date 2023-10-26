@@ -7,10 +7,14 @@ public class MovingController : MonoBehaviour
     public float Height = 0.05f;
     public float CamHeight;
     public float LerpSpeed;
+    public FloatingJoystick joystick;
+
+    public Vector3 direction;
 
     [SerializeField]private Transform MeshTransform;
     [SerializeField]private Transform camTransform;
 
+    private Quaternion rotation;
     private RaycastHit hit;
     private Vector3 movementDirection;
     private Vector3 destinationPoint;
@@ -39,10 +43,8 @@ public class MovingController : MonoBehaviour
     private void CheckHeight()
     {
         var direction = MeshTransform.position - destinationPoint;
+      
         Physics.Raycast(destinationPoint, direction, out hit, 5, Mask);
-
-        Debug.DrawRay(destinationPoint, direction, Color.green);
-        Debug.DrawRay(hit.point, hit.normal * 5, Color.magenta);
 
         var cross = Vector3.Cross(hit.normal, transform.forward);//vector perpendicular to plane normal-forward for build new vector forward
         var newForward = Vector3.Cross(cross, hit.normal);
@@ -53,16 +55,15 @@ public class MovingController : MonoBehaviour
 
     private void ChangeDirection()
     {
-        var vertical = Input.GetAxis("Vertical");
-        var horizontal = Input.GetAxis("Horizontal");
+        var vertical = joystick.Vertical;
+        var horizontal = joystick.Horizontal;
 
-        if(Input.GetButton("Vertical") || Input.GetButton("Horizontal"))
+        if(vertical !=0 || horizontal !=0)
         {
             var forward = horizontal * camTransform.right + vertical * camTransform.up;
-            var rotation = Quaternion.LookRotation(forward, -camTransform.forward);
+            rotation = Quaternion.LookRotation(forward, -camTransform.forward);
 
-            //transform.rotation = rotation;
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5*LerpSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5 * LerpSpeed * Time.deltaTime);
         }
     }
 
