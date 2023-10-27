@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class MovingController : MonoBehaviour
 {
-    public LayerMask Mask;
-    public float Velocity = 1;
-    public float Height = 0.05f;
+    public float Velocity;
     public float CamHeight;
-    public float LerpSpeed;
-    public FloatingJoystick joystick;
+    public float CamLerpSpeed;
+    public float JoysticSensitivity;
+    public float CastPointOffset;
 
-    public Vector3 direction;
+    
+    [SerializeField]private FloatingJoystick joystick;
+    [SerializeField]private LayerMask mask;
 
-    [SerializeField]private Transform MeshTransform;
-    [SerializeField]private Transform camTransform;
-
+    private Transform camTransform;
+    private Vector3 direction;
     private Quaternion rotation;
     private RaycastHit hit;
-    private Vector3 movementDirection;
     private Vector3 destinationPoint;
 
     private void Start()
     {
+        camTransform = Camera.main.transform;
         var y = transform.up * CamHeight;
         camTransform.position = transform.position + y;
         camTransform.LookAt(transform, camTransform.up);
@@ -32,25 +32,25 @@ public class MovingController : MonoBehaviour
         CalculateDestination();
         CheckHeight();
         Move();
+        CamMove();
     }
 
     private void CalculateDestination()
     {
-        movementDirection = transform.forward * Velocity;
-        destinationPoint = transform.position + movementDirection * Time.deltaTime;
+        destinationPoint = transform.position + transform.forward;
     }
 
     private void CheckHeight()
     {
-        var direction = MeshTransform.position - destinationPoint;
-      
-        Physics.Raycast(destinationPoint, direction, out hit, 5, Mask);
+        direction = -transform.up;
+
+        Physics.Raycast(destinationPoint + transform.up, direction, out hit, 3, mask);
 
         var cross = Vector3.Cross(hit.normal, transform.forward);//vector perpendicular to plane normal-forward for build new vector forward
         var newForward = Vector3.Cross(cross, hit.normal);
 
         var rotation = Quaternion.LookRotation(newForward,hit.normal);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, LerpSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Velocity * Time.deltaTime);
     }
 
     private void ChangeDirection()
@@ -62,18 +62,25 @@ public class MovingController : MonoBehaviour
         {
             var forward = horizontal * camTransform.right + vertical * camTransform.up;
             rotation = Quaternion.LookRotation(forward, -camTransform.forward);
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5 * LerpSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, JoysticSensitivity);
         }
     }
 
     private void Move()
     {
-        var targetPoint = hit.point + hit.normal * Height;
-        transform.position = Vector3.MoveTowards(transform.position, targetPoint, Velocity * Time.deltaTime);
+        var targetPoint = hit.point;
+        if (targetPoint == Vector3.zero)
+        {
+            targetPoint = transform.forward * Velocity * Time.deltaTime;
+        }
 
-        camTransform.position = Vector3.Lerp(camTransform.position, hit.point + hit.normal * CamHeight, LerpSpeed * Time.deltaTime);
-        camTransform.LookAt(transform,camTransform.up);
+        transform.position = Vector3.MoveTowards(transform.position, targetPoint, Velocity * Time.deltaTime);
+    }
+
+    private void CamMove()
+    {
+        camTransform.position = Vector3.Lerp(camTransform.position, transform.position + transform.up * CamHeight, CamLerpSpeed * Time.deltaTime);
+        camTransform.LookAt(transform, camTransform.up);
     }
 
 
