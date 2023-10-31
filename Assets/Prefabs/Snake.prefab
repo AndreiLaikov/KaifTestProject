@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7401062889823993483}
-  - component: {fileID: 8188367615759218328}
-  - component: {fileID: 4252996375767326950}
-  - component: {fileID: 8493197387346397296}
-  - component: {fileID: 7618034758216595136}
+  - component: {fileID: 5248327410263785178}
+  - component: {fileID: 8190954036442651962}
+  - component: {fileID: 1723731798491173369}
+  - component: {fileID: 3516096260503137093}
   m_Layer: 0
   m_Name: Snake
   m_TagString: Untagged
@@ -36,7 +36,7 @@ Transform:
   - {fileID: 3413639164482815066}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8188367615759218328
+--- !u!114 &5248327410263785178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,16 +48,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062b4b675c2cc46e9ab08d8e8ed39b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mask:
+  Velocity: 10
+  CamHeight: 50
+  CamLerpSpeed: 3
+  JoysticSensitivity: 0.5
+  CastPointOffset: 0.5
+  joystick: {fileID: 0}
+  mask:
     serializedVersion: 2
     m_Bits: 64
-  Velocity: 5
-  Height: 0.05
-  CamHeight: 50
-  LerpSpeed: 1
-  MeshTransform: {fileID: 0}
-  camTransform: {fileID: 0}
---- !u!114 &4252996375767326950
+--- !u!114 &8190954036442651962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,9 +70,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HeadTransform: {fileID: 7401062889823993483}
-  BodyPart: {fileID: 919132149155446097, guid: e0b2828227a25854e99c9ca7d0b71e86, type: 3}
+  BodyPart: {fileID: 8471367455997469201, guid: 9c65d57016d734b4ea9e8d4dc503d7f1, type: 3}
   bodyHorizontalSize: 0
---- !u!54 &8493197387346397296
+--- !u!54 &1723731798491173369
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,7 +99,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &7618034758216595136
+--- !u!135 &3516096260503137093
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +118,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.7
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Radius: 0.6
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2942284073426576305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,11 +134,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b62b8a8240d2b1945a61ac96abc31fef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b62b8a8240d2b1945a61ac96abc31fef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.75
+      value: -1.14
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b62b8a8240d2b1945a61ac96abc31fef, type: 3}
       propertyPath: m_LocalRotation.w

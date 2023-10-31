@@ -19,42 +19,43 @@ public class BodyController : MonoBehaviour
         bodyPartTransforms = new List<Transform>();
         positions = new List<Vector3>();
         rotations = new List<Quaternion>();
+        bodyHorizontalSize = BodyPart.GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
 
         positions.Add(HeadTransform.position);
         rotations.Add(HeadTransform.rotation);
-
-        bodyHorizontalSize = BodyPart.GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
     }
 
     public void AddPart()
     {
         lastIndex = positions.Count - 1;
-
-        var newPart = Instantiate(BodyPart, positions[lastIndex], rotations[lastIndex]);
+        var newPart = Instantiate(BodyPart, positions[lastIndex], rotations[lastIndex], transform.parent);
         bodyPartTransforms.Add(newPart.transform);
+
         positions.Add(newPart.transform.position);
         rotations.Add(newPart.transform.rotation);
     }
 
     private void InsertTransform()
     {
-        distance = (HeadTransform.position - positions[0]).magnitude;
+        var direction = HeadTransform.position - positions[0];
+
+        distance = direction.magnitude;
 
         if (distance > bodyHorizontalSize)
         {
-            positions.Insert(0, HeadTransform.position);
+            positions.Insert(0, positions[0] + direction.normalized * bodyHorizontalSize);
             positions.RemoveAt(positions.Count - 1);
 
             rotations.Insert(0, HeadTransform.rotation);
             rotations.RemoveAt(rotations.Count - 1);
 
-            distance -= bodyHorizontalSize;//reduce float rest 
+            distance -= bodyHorizontalSize;
         }
 
         for (int i = 0; i < bodyPartTransforms.Count; i++)
         {
-            bodyPartTransforms[i].position = Vector3.Lerp(positions[i + 1], positions[i], distance/bodyHorizontalSize);
-            bodyPartTransforms[i].rotation = Quaternion.Lerp(rotations[i + 1], rotations[i], distance/bodyHorizontalSize);
+            bodyPartTransforms[i].position = Vector3.Slerp(positions[i + 1], positions[i], distance/bodyHorizontalSize);
+            bodyPartTransforms[i].rotation = Quaternion.Slerp(rotations[i + 1], rotations[i], distance/bodyHorizontalSize);
         }
     }
 
@@ -62,8 +63,6 @@ public class BodyController : MonoBehaviour
     private void Update()
     {
         InsertTransform();
-        if (Input.GetKeyDown(KeyCode.Space))
-            AddPart();
     }
 
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FoodSpawner : MonoBehaviour
 {
-    public GameObject Food;
+    public Food Food;
     public MeshFilter Surface;
     public LayerMask mask;
     public int startFoodCount = 100;
@@ -32,8 +32,7 @@ public class FoodSpawner : MonoBehaviour
 
             if (CheckFreePosition(position))
             {
-                var newFood = Instantiate(Food.gameObject, position, Quaternion.identity, transform);
-                newFood.GetComponent<Food>().foodSpawnerInstance = this;
+                Instantiate(Food, position, Quaternion.identity, transform).foodSpawnerInstance = this;
             }
             else
             {
